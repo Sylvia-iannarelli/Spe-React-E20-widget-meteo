@@ -10,14 +10,23 @@ interface WidgetMeteoProps {
 function WidgetMeteo( { city, zipcode }: WidgetMeteoProps) {
 
     const [temperature, setTemperature] = useState<number | null>(null)
-    const [icon, setIcon] = useState('')
+    const [icon, setIcon] = useState('04d')
     
     useEffect(
         () => {
             const fetchTemperature = async () => {
-                const API_KEY = '47840f4f526d9cc69b4b575c52495860'
-                const result = await axios.get(`https://api.openweathermap.org/data/2.5/weather?zip=${zipcode},fr&appid=${API_KEY}&units=metric`)
-                console.log(result)
+
+                const API_KEY = import.meta.env.VITE_API_KEY
+
+                let API_URL = '';
+                if (import.meta.env.MODE === 'production') {
+                    API_URL = `https://api.openweathermap.org/data/2.5/weather?zip=${zipcode},fr&appid=${API_KEY}&units=metric`
+                }
+                if (import.meta.env.MODE === 'development') {
+                    API_URL = `https://api.openweathermap.org/data/2.5/weather?zip=${zipcode},fr&appid=${API_KEY}&units=metric`
+                }
+
+                const result = await axios.get(API_URL)
                 setTemperature(Math.round(result.data.main.temp*10)/10)
                 setIcon(result.data.weather[0].icon)
             }
