@@ -10,6 +10,7 @@ interface WidgetMeteoProps {
 function WidgetMeteo( { city, zipcode }: WidgetMeteoProps) {
 
     const [temperature, setTemperature] = useState(0)
+    const [icon, setIcon] = useState('')
     
     useEffect(
         () => {
@@ -18,6 +19,7 @@ function WidgetMeteo( { city, zipcode }: WidgetMeteoProps) {
                 const result = await axios.get(`https://api.openweathermap.org/data/2.5/weather?zip=${zipcode},fr&appid=${API_KEY}&units=metric`)
                 console.log(result)
                 setTemperature(Math.round(result.data.main.temp*10)/10)
+                setIcon(result.data.weather[0].icon)
             }
             fetchTemperature() // appel API
         },
@@ -30,6 +32,9 @@ function WidgetMeteo( { city, zipcode }: WidgetMeteoProps) {
                 <div className="meteo-city">{city}</div>
                 <div className="meteo-zipcode">{zipcode}</div>
                 <div className="meteo-temperature">{temperature}°C</div>
+            </div>
+            <div>
+                <img src={`https://openweathermap.org/img/wn/${icon}@2x.png`} alt="" />
             </div>
         </div>
     )
