@@ -9,7 +9,7 @@ interface WidgetMeteoProps {
 
 function WidgetMeteo( { city, zipcode }: WidgetMeteoProps) {
 
-    const [temperature, setTemperature] = useState(0)
+    const [temperature, setTemperature] = useState<number | null>(null)
     const [icon, setIcon] = useState('')
     
     useEffect(
